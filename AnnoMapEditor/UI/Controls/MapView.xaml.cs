@@ -24,6 +24,13 @@ namespace AnnoMapEditor.UI.Controls
     {
         public static readonly double MAP_ROTATION_ANGLE = -135;
 
+        // Canvas controls
+        private double _zoom = 1.0;
+        private const double ZoomFactor = 1.1;
+        private const double MinZoom = 0.1;
+        private const double MaxZoom = 10.0;
+        private Point? _panStartScreen = null;
+        private Point? _panStartOffset = null;
 
         private MapTemplate? _mapTemplate { get; set; }
 
@@ -147,6 +154,14 @@ namespace AnnoMapEditor.UI.Controls
             SizeChanged += MapView_SizeChanged;
             DataContextChanged += MapView_DataContextChanged;
 
+            // Canvas controls
+            MouseWheel += MapView_MouseWheel;
+            MouseDown += MapView_MouseDown;
+            MouseUp += MapView_MouseUp;
+            MouseMove += MapView_MouseMove;
+            MouseLeave += MapView_MouseLeave;
+
+
             Settings.Instance.PropertyChanged += Settings_PropertyChanged;
         }
 
@@ -168,6 +183,75 @@ namespace AnnoMapEditor.UI.Controls
         {
             UpdateSize();
         }
+
+        #region Canvas controls
+        private void MapView_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            Point mousePos = e.GetPosition(zoomContainer);
+            double zoomDelta = e.Delta > 0 ? ZoomFactor : 1 / ZoomFactor;
+
+            double newZoom = _zoom * zoomDelta;
+            if (newZoom < MinZoom || newZoom > MaxZoom)
+                return;
+
+            _zoom = newZoom;
+
+            // Keep zoom centered at mouse position
+            ZoomScale.ScaleX = _zoom;
+            ZoomScale.ScaleY = _zoom;
+
+            ZoomTranslate.X = (1 - _zoom) * mousePos.X;
+            ZoomTranslate.Y = (1 - _zoom) * mousePos.Y;
+        }
+        private void MapView_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Middle)
+            {
+                _panStartScreen = e.GetPosition(this);
+                _panStartOffset = new Point(ZoomTranslate.X, ZoomTranslate.Y);
+                Cursor = Cursors.SizeAll;
+                CaptureMouse();
+                e.Handled = true;
+            }
+        }
+
+        private void MapView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_panStartScreen != null && _panStartOffset != null && e.MiddleButton == MouseButtonState.Pressed)
+            {
+                Point current = e.GetPosition(this);
+                Vector delta = current - _panStartScreen.Value;
+
+                ZoomTranslate.X = _panStartOffset.Value.X + delta.X;
+                ZoomTranslate.Y = _panStartOffset.Value.Y + delta.Y;
+
+                e.Handled = true;
+            }
+        }
+
+        private void MapView_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Middle)
+            {
+                _panStartScreen = null;
+                _panStartOffset = null;
+                Cursor = Cursors.Arrow;
+                ReleaseMouseCapture();
+                e.Handled = true;
+            }
+        }
+
+        private void MapView_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (e.MiddleButton != MouseButtonState.Pressed)
+            {
+                _panStartScreen = null;
+                _panStartOffset = null;
+                Cursor = Cursors.Arrow;
+                ReleaseMouseCapture();
+            }
+        }
+        #endregion
 
         private void UpdateIslands(MapTemplate? mapTemplate)
         {
@@ -352,7 +436,7 @@ namespace AnnoMapEditor.UI.Controls
                 if (!protoIslandViewModel.IsOutOfBounds)
                 {
                     // if it is a FixedIsland, let the user select the correct island
-                    if (protoIslandViewModel.MapElementType == MapElementType.FixedIsland)
+                    if (_mapTemplate != null && protoIslandViewModel.MapElementType == MapElementType.FixedIsland)
                     {
                         SelectIslandViewModel selectIslandViewModel = new(_mapTemplate.Session.Region, protoIslandViewModel.Island.IslandType, protoIslandViewModel.IslandSize);
                         selectIslandViewModel.IslandSelected += (s, e) => SelectIsland_IslandSelected(s, e, protoIslandViewModel.Island.Position);
@@ -517,7 +601,7 @@ namespace AnnoMapEditor.UI.Controls
             {
                 Position = position
             };
-            _mapTemplate.Elements.Add(fixedIslandElement);
+            _mapTemplate?.Elements.Add(fixedIslandElement);
         }
 
         private void MapElementViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -540,7 +624,7 @@ namespace AnnoMapEditor.UI.Controls
             {
                 if (sender is IslandViewModel viewModel)
                 {
-                    if (viewModel.IsOutOfBounds && !viewModel.IsDragging && !_mapTemplate.ResizingInProgress)
+                    if (_mapTemplate != null && viewModel.IsOutOfBounds && !viewModel.IsDragging && !_mapTemplate.ResizingInProgress)
                     {
                         _mapTemplate.Elements.Remove(viewModel.Element);
 

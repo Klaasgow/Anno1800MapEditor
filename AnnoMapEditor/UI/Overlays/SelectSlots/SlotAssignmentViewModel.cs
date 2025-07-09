@@ -51,14 +51,14 @@ namespace AnnoMapEditor.UI.Overlays.SelectSlots
             get => _pinBrush;
             private set => SetProperty(ref _pinBrush, value);
         }
-        private Brush _pinBrush;
+        private Brush _pinBrush = Brushes.Pink;
 
         public Brush BackgroundBrush
         {
             get => _backgroundBrush;
             private set => SetProperty(ref _backgroundBrush, value);
         }
-        private Brush _backgroundBrush;
+        private Brush _backgroundBrush = Brushes.Pink;
 
         public RegionAsset SelectedRegion
         {

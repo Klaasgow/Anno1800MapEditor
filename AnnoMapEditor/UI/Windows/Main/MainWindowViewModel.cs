@@ -16,12 +16,12 @@ namespace AnnoMapEditor.UI.Windows.Main
 {
     public class MainWindowViewModel : ObservableBase
     {
-        public MapTemplate MapTemplate
+        public MapTemplate? MapTemplate
         {
             get => _mapTemplate;
             private set
             {
-                if (value != _mapTemplate)
+                if (value != null && value != _mapTemplate)
                 {
                     SetProperty(ref _mapTemplate, value);
                     SelectedIsland = null;
@@ -31,21 +31,21 @@ namespace AnnoMapEditor.UI.Windows.Main
                 }
             }
         }
-        private MapTemplate _mapTemplate;
+        private MapTemplate? _mapTemplate;
 
-        public MapTemplatePropertiesViewModel MapTemplateProperties 
+        public MapTemplatePropertiesViewModel? MapTemplateProperties 
         { 
             get => _mapTemplateProperties; 
             private set => SetProperty(ref _mapTemplateProperties, value); 
         }
-        private MapTemplatePropertiesViewModel _mapTemplateProperties;
+        private MapTemplatePropertiesViewModel? _mapTemplateProperties;
 
-        public MapTemplateCheckerViewModel MapTemplateChecker
+        public MapTemplateCheckerViewModel? MapTemplateChecker
         {
             get => _mapTemplateChecker;
             private set => SetProperty(ref _mapTemplateChecker, value);
         }
-        private MapTemplateCheckerViewModel _mapTemplateChecker;
+        private MapTemplateCheckerViewModel? _mapTemplateChecker;
 
 
         public IslandElement? SelectedIsland

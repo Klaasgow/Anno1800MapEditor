@@ -14,14 +14,14 @@ namespace AnnoMapEditor
         public App() {
             ResxLocalizationProvider provider = ResxLocalizationProvider.Instance;
 
-            provider.SearchCultures = new List<System.Globalization.CultureInfo>()
+            provider.SearchCultures = new List<CultureInfo>()
             {
-                System.Globalization.CultureInfo.GetCultureInfo("en"),
-                System.Globalization.CultureInfo.GetCultureInfo("de"),
+                CultureInfo.GetCultureInfo("en"),
+                CultureInfo.GetCultureInfo("de"),
             };
             LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");
 
-            int i = 0;
+            //int i = 0;
         }
     }
 }

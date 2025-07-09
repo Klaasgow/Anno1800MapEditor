@@ -64,6 +64,7 @@ namespace AnnoMapEditor.DataArchives.Assets.Repositories
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError("Unable to deserialize asset!", ex);
                     return null;
                 }
 
@@ -295,7 +296,7 @@ namespace AnnoMapEditor.DataArchives.Assets.Repositories
 
                     if (TryGet(staticAssetAttribute.GUID, out StandardAsset? asset))
                     {
-                        if (!staticProperty.PropertyType.IsAssignableFrom(asset.GetType()))
+                        if (asset != null && !staticProperty.PropertyType.IsAssignableFrom(asset.GetType()))
                             throw new Exception($"Could not resolve StaticAsset {assetType.FullName}.{staticProperty.Name}. The asset's type {asset.GetType().FullName} does not match the property's type {staticProperty.PropertyType.FullName}.");
 
                         staticProperty.SetValue(null, asset);

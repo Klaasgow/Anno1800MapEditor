@@ -15,7 +15,7 @@ namespace AnnoMapEditor.MapTemplates.Models
                 SizeInTiles = _islandSize.DefaultSizeInTiles;
             }
         }
-        private IslandSize _islandSize;
+        private IslandSize _islandSize = IslandSize.Default;
 
 
         public RandomIslandElement(IslandSize islandSize, IslandType islandType)

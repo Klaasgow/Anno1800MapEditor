@@ -29,7 +29,7 @@ namespace AnnoMapEditor.DataArchives
             }
             catch (FileNotFoundException e)
             {
-                _logger.LogWarning($"not found in archive: {filePath}");
+                _logger.LogWarning($"not found in archive: {filePath} - " + e);
             }
             catch (Exception e)
             {

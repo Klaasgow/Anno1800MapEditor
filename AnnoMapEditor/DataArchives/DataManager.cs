@@ -89,7 +89,7 @@ namespace AnnoMapEditor.DataArchives
                 await _islandRepository.InitializeAsync();
 
                 _mapGroupRepository = new MapGroupRepository(_dataArchive);
-                _mapGroupRepository.InitializeAsync();
+                await _mapGroupRepository.InitializeAsync();
             }
             catch (Exception ex)
             {

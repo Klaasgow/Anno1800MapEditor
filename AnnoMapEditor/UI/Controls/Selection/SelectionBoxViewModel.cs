@@ -48,7 +48,7 @@ namespace AnnoMapEditor.UI.Controls.Selection
             get => _boundary;
             private set => SetProperty(ref _boundary, value);
         }
-        private PointCollection _boundary;
+        private PointCollection _boundary = new PointCollection();
 
 
         public SelectionBoxViewModel(Point start)

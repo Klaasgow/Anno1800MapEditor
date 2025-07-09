@@ -36,7 +36,7 @@ namespace AnnoMapEditor.DataArchives.Assets.Deserialization
                 ?? throw new ArgumentException($"Invalid {nameof(RegionIdReferenceAttribute)} on property {typeof(TAsset).FullName}.{referenceProperty.Name}. Could not find property {referenceAttribute.RegionIdPropertyName}.");
 
             // create the resolver
-            Action<object> resolver;
+            //Action<object> resolver;
             if (regionIdProperty.PropertyType == typeof(string))
                 return CreateSingleResolver<TAsset>(referenceProperty, regionIdProperty);
 

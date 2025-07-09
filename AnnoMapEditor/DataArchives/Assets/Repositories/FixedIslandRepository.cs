@@ -114,7 +114,7 @@ namespace AnnoMapEditor.DataArchives.Assets.Repositories
             //     <None>
             //   <None>
             Dictionary<long, Slot> mineSlots = new();
-            if (islandTemplate.ObjectMetaInfo?.SlotObjects is not null)
+            if (islandTemplate != null && islandTemplate.ObjectMetaInfo?.SlotObjects is not null)
             {
                 foreach ((ShortIdValueWrapper id, List<ObjectItem> items) in islandTemplate.ObjectMetaInfo.SlotObjects)
                 {

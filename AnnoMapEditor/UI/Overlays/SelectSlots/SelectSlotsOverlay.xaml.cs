@@ -158,7 +158,7 @@ namespace AnnoMapEditor.UI.Overlays.SelectSlots
                 LineSegment toSelector;
 
                 // update an existing path
-                if (pointerExists)
+                if (pointerExists && pointer != null)
                 {
                     pointerFigure = (pointer.Data as PathGeometry)!.Figures.First();
                     toCorner = (pointerFigure.Segments[0] as LineSegment)!;

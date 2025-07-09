@@ -21,16 +21,16 @@ namespace AnnoMapEditor.DataArchives.Assets.Models
 
 
         [StaticAsset(REGION_MODERATE_GUID)]
-        public static RegionAsset Moderate { get; private set; }
+        public static RegionAsset? Moderate { get; private set; }
 
         [StaticAsset(REGION_SOUTHAMERICA_GUID)]
-        public static RegionAsset SouthAmerica { get; private set; }
+        public static RegionAsset? SouthAmerica { get; private set; }
 
         [StaticAsset(REGION_ARCTIC_GUID)]
-        public static RegionAsset Arctic { get; private set; }
+        public static RegionAsset? Arctic { get; private set; }
 
         [StaticAsset(REGION_AFRICA_GUID)]
-        public static RegionAsset Africa { get; private set; }
+        public static RegionAsset? Africa { get; private set; }
 
         public static IEnumerable<RegionAsset> SupportedRegions => new[] { Moderate, SouthAmerica, Arctic, Africa };
 
